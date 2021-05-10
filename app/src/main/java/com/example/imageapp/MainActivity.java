@@ -8,10 +8,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import static android.content.Intent.ACTION_GET_CONTENT;
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private int IMG_REQUEST=21;
     private Bitmap bitmap;
     public ImageView imageView;
+    public Button btn2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         imageView=findViewById(R.id.image);
 
          btn=findViewById(R.id.button);
+         btn2=findViewById(R.id.uploadButton);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +47,25 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadImage();
+            }
+        });
+    }
+
+    private void uploadImage() {
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,75,byteArrayOutputStream);
+        byte[] imageInByte=byteArrayOutputStream.toByteArray();
+
+        String encodedImage =Base64.encodeToString(imageInByte,Base64.DEFAULT);
+
+        Toast.makeText(this,encodedImage,Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
